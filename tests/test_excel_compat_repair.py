@@ -22,6 +22,7 @@ def fixture(path):
             '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
             '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
             '<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>'
+            '<Override PartName="/xl/drawings/charts/chart1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>'
             '</Types>',
         "_rels/.rels":
             '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
@@ -34,6 +35,12 @@ def fixture(path):
             '<c r="B1" t="str"><f>IF(1=1,"yes","no")</f><v>yes</v></c>'
             '<c r="C1" t="str"/>'
             '</row></sheetData></worksheet>',
+        "xl/drawings/_rels/drawing1.xml.rels":
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" '
+            'Target="/xl/drawings/charts/chart1.xml"/></Relationships>',
+        "xl/drawings/charts/chart1.xml":
+            '<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"/>',
         "xl/drawings/drawing1.xml":
             '<xdr:wsDr xmlns:xdr="' + D + '">'
             '<xdr:cNvPr id="1" name="Chart"/>'
@@ -63,9 +70,13 @@ class Excel2010RepairRegression(unittest.TestCase):
             self.assertEqual(counts["literal_text_normalized"], 1)
             self.assertEqual(counts["blank_string_type_cleared"], 1)
             self.assertEqual(counts["duplicate_drawing_names_corrected"], 1)
+            self.assertEqual(counts["chart_parts_relocated"], 1)
             report = audit(output, excel_2010_strict=True)
             self.assertEqual(report["errors"], [])
             with zipfile.ZipFile(output) as z:
+                self.assertIn("xl/charts/chart1.xml", z.namelist())
+                self.assertNotIn("xl/drawings/charts/chart1.xml", z.namelist())
+                self.assertIn(b'/xl/charts/chart1.xml', z.read("xl/drawings/_rels/drawing1.xml.rels"))
                 root = ET.fromstring(z.read("xl/worksheets/sheet1.xml"))
                 cells = {c.get("r"): c for c in root.iter("{" + S + "}c")}
                 self.assertEqual(cells["A1"].get("t"), "inlineStr")
