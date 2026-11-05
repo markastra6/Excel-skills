@@ -16,8 +16,8 @@ This repository contains **opt-in workflow skills**, not automatically installed
 
 ## Tools
 - `python scripts/audit_xlsx.py workbook.xlsx`
-- `python scripts/inventory_xlsx.py workbook.xlsx` (once added)
-- `python scripts/compare_xlsx.py original.xlsx revised.xlsx` (once added)
+- `python scripts/inventory_xlsx.py workbook.xlsx`
+- `python scripts/compare_xlsx.py original.xlsx revised.xlsx`
 - `python -m unittest discover -s tests -v`
 
 For actual workbook creation/editing in supported environments, follow the installed spreadsheet engine's documented API; do not substitute a static screenshot for an editable workbook.
