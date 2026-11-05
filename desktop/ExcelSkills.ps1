@@ -166,7 +166,7 @@ function CreateTracker($book) {
         $sheet.Range("F$r").Formula = '=IF(C'+$r+'="","",MAX(0,C'+$r+'-E'+$r+'))'
         $sheet.Range("I$r").Formula = '=IF(C'+$r+'="","",MAX(0,C'+$r+'-H'+$r+'))'
         $sheet.Range("L$r").Formula = '=IF(OR(C'+$r+'="",K'+$r+'=""),"",IF(OR(C'+$r+'<=0,K'+$r+'<0,K'+$r+'>C'+$r+'),"CHECK",1-K'+$r+'/C'+$r+'))'
-        $sheet.Range("M$r").Formula = '=IF(C'+$r+'="","",IF(OR(E'+$r+'>C'+$r+',H'+$r+'>C'+$r+'),"Review",IF(AND(F'+$r+'=0,I'+$r+'=0),"Done",IF(OR(E'+$r+'>0,H'+$r+'>0),"In Progress","Not Started"))))'
+        $sheet.Range("M$r").Formula = '=IF(C'+$r+'="","",IF(OR(C'+$r+'<=0,E'+$r+'<0,H'+$r+'<0,J'+$r+'<0,K'+$r+'<0,K'+$r+'>C'+$r+',E'+$r+'>C'+$r+',H'+$r+'>C'+$r+'),"Review",IF(AND(F'+$r+'=0,I'+$r+'=0),"Done",IF(OR(E'+$r+'>0,H'+$r+'>0),"In Progress","Not Started"))))'
         $sheet.Range("N$r").Formula = '=IF(OR(C'+$r+'="",B'+$r+'=""),"",IF(B'+$r+'="SB",C'+$r+'/$B$4*$L$4,IF(B'+$r+'="WS",C'+$r+'/$D$4*$L$4,"")))'
     }
     $sheet.Range('L11:L32').NumberFormat = '0%'
