@@ -197,7 +197,10 @@ function CreateTracker($book) {
     $sheet.Range('P26').Value2='SECTION COVERAGE - PLAN, COMP, QC'
     $sheet.Range('P26:AB26').Interior.Color = (OleColor 234 240 246)
     $sheet.Range('P26:AB26').Font.Bold=$true
-    $sheet.Range('AE10:AH10').Value2 = @('Section','Planned','Comp','QC')
+    $sheet.Range('AE10').Value2 = 'Section'
+    $sheet.Range('AF10').Value2 = 'Planned'
+    $sheet.Range('AG10').Value2 = 'Comp'
+    $sheet.Range('AH10').Value2 = 'QC'
     for($i=11;$i -le 13;$i++){
         $t = @('SB','WS','SA')[$i-11]
         $sheet.Range("AE$i").Value2=$t
@@ -216,7 +219,7 @@ function CreateTracker($book) {
                'I'=10;'J'=11;'K'=10;'L'=11;'M'=14;'N'=14;'O'=3;'P'=15;
                'Q'=9;'R'=9;'S'=8;'T'=8;'U'=8;'V'=8;'W'=8;'X'=8;
                'Y'=8;'Z'=8;'AA'=10;'AB'=11}
-    foreach ($column in $sizes.Keys) { $sheet.Columns.Item($column).ColumnWidth=$sizes[$column] }
+    foreach ($column in $sizes.Keys) { $sheet.Range(('{0}:{0}' -f $column)).EntireColumn.ColumnWidth = $sizes[$column] }
     $sheet.PageSetup.Orientation=2
     $sheet.PageSetup.PrintArea='$A$1:$AB$39'
     $sheet.PageSetup.Zoom=$false
@@ -237,8 +240,7 @@ function CopyToStage([string]$input,[string]$final) {
 }
 function CsvIntoWorkbook($book,[string]$csvPath) {
     Add-Type -AssemblyName Microsoft.VisualBasic
-    $parser = New-Object Microsoft.VisualBasic.FileIO.TextFieldParser(
-       $csvPath, [System.Text.Encoding]::UTF8)
+    $parser = [Microsoft.VisualBasic.FileIO.TextFieldParser]::new($csvPath, [System.Text.Encoding]::UTF8)
     try {
         $parser.TextFieldType = [Microsoft.VisualBasic.FileIO.FieldType]::Delimited
         $parser.SetDelimiters(',')
@@ -256,7 +258,7 @@ function CsvIntoWorkbook($book,[string]$csvPath) {
     if ($rows.Count -eq 0) { throw 'CSV is empty' }
     $ws=$book.Worksheets.Item(1)
     $ws.Name='Imported Data'
-    $matrix=New-Object 'object[,]' $rows.Count,$maxCols
+    $matrix = [Array]::CreateInstance([object], [int[]]@($rows.Count, $maxCols))
     for ($i=0; $i -lt $rows.Count; $i++){
         for ($j=0; $j -lt $maxCols; $j++){
             if ($j -lt $rows[$i].Length) { $matrix[$i,$j]=[string]$rows[$i][$j] }
