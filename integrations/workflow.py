@@ -103,7 +103,7 @@ def run_plan(plan, apply=False):
                 raise RuntimeError("CSV-to-XLSX import requires Windows and desktop Excel")
             if not data["source"].is_file():
                 raise FileNotFoundError(data["source"])
-            cmd = ["powershell.exe", "-NoProfile", "-NonInteractive", "-File",
+            cmd = ["powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File",
                    str(ROOT / "desktop" / "ExcelSkills.ps1"), "-Action", "ImportCsv",
                    "-Source", str(data["source"]), "-Destination", str(data["destination"])]
             subprocess.run(cmd, check=True)
