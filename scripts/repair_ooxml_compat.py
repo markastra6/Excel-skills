@@ -37,6 +37,8 @@ def fix_worksheet(data, count):
             continue
         value = cell.find(tag(MAIN, "v"))
         if value is None:
+            cell.attrib.pop("t", None)
+            count["blank_string_type_cleared"] += 1
             continue
         literal = value.text or ""
         pos = list(cell).index(value)
