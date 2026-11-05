@@ -2,6 +2,15 @@
 
 This repository contains **opt-in workflow skills**, not automatically installed Excel plugins. Read [skills/INDEX.md](skills/INDEX.md), choose the smallest relevant skill set, and inspect the user's workbook **before** edits.
 
+## Permanent Excel repair-warning prevention policy
+
+**Never deliver an XLSX as Excel-2010-verified based solely on ZIP/XML tests or a third-party engine.**
+All final workbooks must pass `python scripts/audit_xlsx.py --excel-2010-strict file.xlsx`; the release reviewer must also open, recalculate, save, close and reopen a COPY in desktop Excel 2010 with **no unreadable-content or repair prompt**. If desktop Excel is unavailable, state the limitation explicitly and do not claim guaranteed compatibility.
+
+When a generated file contains literal cells typed as `t="str"`, ambiguous workbook XML MIME defaults, or unnecessary x14 conditional-formatting extensions, normalize the package using `scripts/repair_ooxml_compat.py` before delivery and rerun strict checks. Preserve formulas, cached values, existing data, styles, drawing/chart relationships and originals; compare source against output cell-by-cell. Never auto-run destructive Excel recovery on a client's original file. Use repair logs to identify any remaining cause.
+
+This is a standing requirement, including Production/QC trackers, templates, charts and workbook redesigns.
+
 ## Non-negotiable rules
 1. Preserve source files; write new outputs unless overwrite is specifically authorized.
 2. Start from the actual source workbook—not an invented generic layout.
