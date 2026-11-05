@@ -2,8 +2,6 @@ name: Export GitHub issues as CSV
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '15 2 * * 1'
 
 permissions:
   contents: read
