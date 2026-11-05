@@ -165,7 +165,7 @@ function CreateTracker($book) {
     for ($r = 11; $r -le 32; $r++) {
         $sheet.Range("F$r").Formula = '=IF(C'+$r+'="","",MAX(0,C'+$r+'-E'+$r+'))'
         $sheet.Range("I$r").Formula = '=IF(C'+$r+'="","",MAX(0,C'+$r+'-H'+$r+'))'
-        $sheet.Range("L$r").Formula = '=IF(OR(C'+$r+'="",K'+$r+'=""),"",IF(OR(K'+$r+'<0,K'+$r+'>C'+$r+'),"CHECK",1-K'+$r+'/C'+$r+'))'
+        $sheet.Range("L$r").Formula = '=IF(OR(C'+$r+'="",K'+$r+'=""),"",IF(OR(C'+$r+'<=0,K'+$r+'<0,K'+$r+'>C'+$r+'),"CHECK",1-K'+$r+'/C'+$r+'))'
         $sheet.Range("M$r").Formula = '=IF(C'+$r+'="","",IF(OR(E'+$r+'>C'+$r+',H'+$r+'>C'+$r+'),"Review",IF(AND(F'+$r+'=0,I'+$r+'=0),"Done",IF(OR(E'+$r+'>0,H'+$r+'>0),"In Progress","Not Started"))))'
         $sheet.Range("N$r").Formula = '=IF(OR(C'+$r+'="",B'+$r+'=""),"",IF(B'+$r+'="SB",C'+$r+'/$B$4*$L$4,IF(B'+$r+'="WS",C'+$r+'/$D$4*$L$4,"")))'
     }
@@ -258,6 +258,7 @@ function CsvIntoWorkbook($book,[string]$csvPath) {
     if ($rows.Count -eq 0) { throw 'CSV is empty' }
     $ws=$book.Worksheets.Item(1)
     $ws.Name='Imported Data'
+    if (($rows.Count * $maxCols) -gt 500000) { throw 'CSV exceeds 500,000 cells; split the data into smaller files for Excel 2010' }
     $matrix = [Array]::CreateInstance([object], [int[]]@($rows.Count, $maxCols))
     for ($i=0; $i -lt $rows.Count; $i++){
         for ($j=0; $j -lt $maxCols; $j++){
