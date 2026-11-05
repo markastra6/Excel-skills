@@ -45,7 +45,7 @@ def audit(path):
                 result["sheets"] = len(sheet_names)
                 if len({n.casefold() for n in sheet_names}) != len(sheet_names):
                     result["errors"].append("Duplicate sheet names")
-            result["charts"] = sum(bool(re.fullmatch(r"xl/charts/chart\\d+\\.xml", p)) for p in parts)
+            result["charts"] = sum(bool(re.fullmatch(r"xl/charts/chart[0-9]+[.]xml", p)) for p in parts)
             if any("xl/charts/chartEx" in p for p in parts):
                 result["warnings"].append("Modern chart extension: verify in Excel 2010")
             for name, root in roots.items():
@@ -62,7 +62,7 @@ def audit(path):
                         resolved = target.lstrip("/") if target.startswith("/") else posixpath.normpath(posixpath.join(source_dir, target))
                         if resolved not in parts:
                             result["errors"].append("Missing relationship target: " + name + " -> " + resolved)
-                if re.fullmatch(r"xl/worksheets/sheet\\d+\\.xml", name):
+                if re.fullmatch(r"xl/worksheets/sheet[0-9]+[.]xml", name):
                     for f in root.findall(".//x:f", NS):
                         value = f.text or ""
                         result["formulas"] += 1
