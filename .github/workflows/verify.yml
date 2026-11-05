@@ -1,0 +1,26 @@
+name: Verify Excel tools and templates
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test XLSX auditor
+        run: python -m unittest discover -s tests -v
+      - name: Audit committed templates
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(templates/*.xlsx)
+          if (("${#files[@]}" > 0)); then
+            python scripts/audit_xlsx.py "${files[@]}"
+          else
+            echo "No XLSX templates committed yet."
+          fi
