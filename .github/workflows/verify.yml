@@ -12,7 +12,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Test XLSX auditor
+      - name: Validate Python code
+        run: python -m compileall -q scripts tests
+      - name: Test Excel toolkit
         run: python -m unittest discover -s tests -v
       - name: Audit committed templates
         shell: bash

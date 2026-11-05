@@ -20,6 +20,13 @@ Reusable, Excel 2010-friendly workbooks and automation tools for book-production
 | `docs/` | Tracker design and release standards |
 | `.github/workflows/` | Checks on GitHub pushes and pull requests |
 
+## Excel skill catalog and tools
+
+- [33 task-specific Excel skills](skills/INDEX.md)
+- [Executable offline workbook tools](docs/TOOLS_AND_USAGE.md)
+- [Guidance for coding assistants](AGENTS.md)
+- [Production and QC template standards](docs/TRACKER_DESIGN.md)
+
 ## Check an Excel file
 
 ```bash
