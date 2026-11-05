@@ -10,7 +10,7 @@ if errorlevel 1 (
   echo PowerShell could not be found on this Windows computer.
   exit /b 2
 )
-powershell.exe -NoProfile -File "%~dp0ExcelSkills.ps1" -Action Menu
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0ExcelSkills.ps1" -Action Menu
 set "RESULT=%ERRORLEVEL%"
 echo.
 if not "%RESULT%"=="0" echo The operation failed. Review the error above.
