@@ -32,7 +32,7 @@ jobs:
           shopt -s nullglob
           files=(templates/*.xlsx)
           if (("${#files[@]}" > 0)); then
-            python scripts/audit_xlsx.py "${files[@]}"
+            python scripts/audit_xlsx.py --excel-2010-strict "${files[@]}"
           else
             echo "No XLSX templates committed yet."
           fi
