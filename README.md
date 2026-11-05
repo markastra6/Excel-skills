@@ -36,6 +36,18 @@ We now provide **two executable counterparts** to hosted workflows (not copies o
 
 [Installation, examples, boundaries and security guide](docs/LOCAL_EXCEL_AND_CONNECTORS.md)
 
+## Prevent Excel unreadable-content warnings
+
+**Strict release preflight:**
+
+```bash
+python scripts/audit_xlsx.py --excel-2010-strict "output.xlsx"
+python scripts/repair_ooxml_compat.py "suspect.xlsx" "repaired.xlsx"
+python scripts/audit_xlsx.py --excel-2010-strict "repaired.xlsx"
+```
+
+The repair makes a **new file**, preserves workbook content and basic progress bars, and removes known generator-specific OOXML hazards. After that, opening the output in **desktop Excel 2010 without a recovery prompt** is still mandatory to claim compatibility. See the [release checklist](docs/RELEASE_CHECKLIST.md).
+
 ## Check an Excel file
 
 ```bash
