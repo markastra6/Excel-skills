@@ -1,0 +1,34 @@
+name: Export GitHub issues as CSV
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 2 * * 1'
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Export repository issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python integrations/github_issues.py \
+            --repo markastra6/Excel-skills \
+            --state all \
+            --output reports/issues.csv \
+            --apply
+      - name: Attach CSV report (not committed)
+        uses: actions/upload-artifact@v4
+        with:
+          name: excel-skills-issues
+          path: reports/issues.csv
+          retention-days: 7

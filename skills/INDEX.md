@@ -1,6 +1,9 @@
 # Excel Skills Catalog
 
-**33 task-specific skills** are available as Markdown workflow instructions for assistants, developers, and Excel power users. They do not automatically install or enable Excel features. Read the corresponding `SKILL.md` before working.
+**35 task-specific skills** are available as Markdown workflow instructions for assistants, developers, and Excel power users. They do not automatically install or enable Excel features. Read the corresponding `SKILL.md` before working.
+
+| [Desktop Spreadsheet Workbench](desktop-spreadsheet-workbench/SKILL.md) | Native local Excel 2010+ tracker creation and updates |
+| [Local App Integrations](local-app-integrations/SKILL.md) | GitHub export and safe multi-step workflows |
 
 | Skill | When to use |
 | --- | --- |

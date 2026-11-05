@@ -27,6 +27,15 @@ Reusable, Excel 2010-friendly workbooks and automation tools for book-production
 - [Guidance for coding assistants](AGENTS.md)
 - [Production and QC template standards](docs/TRACKER_DESIGN.md)
 
+## Run Excel locally and connect to GitHub
+
+We now provide **two executable counterparts** to hosted workflows (not copies of the proprietary services):
+
+- **[Desktop Excel Workbench](desktop/ExcelSkills.ps1)** — create one-sheet trackers, change shared targets, import CSV, export PDF, recalculate, inspect (Windows + desktop Excel required). Start with [ExcelSkills.bat](desktop/ExcelSkills.bat).
+- **[Integration workflow runner](integrations/workflow.py)** — export GitHub issues to CSV and sequence supported audits/conversions. Dry-run by default.
+
+[Installation, examples, boundaries and security guide](docs/LOCAL_EXCEL_AND_CONNECTORS.md)
+
 ## Check an Excel file
 
 ```bash

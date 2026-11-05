@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "steps": [
+    {
+      "type": "github_issues_to_csv",
+      "repo": "markastra6/Excel-skills",
+      "state": "open",
+      "output": "reports/github_issues.csv"
+    },
+    {
+      "type": "audit_xlsx",
+      "files": ["templates/*.xlsx"],
+      "allow_empty": true
+    }
+  ]
+}

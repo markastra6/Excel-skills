@@ -14,6 +14,10 @@ This repository contains **opt-in workflow skills**, not automatically installed
 9. Never put client, staff or active project records in this public repository; anonymize hidden sheets, comments, names, cached data and metadata too.
 10. Use native Excel formulas/charts/validations where they make sense. Python scripts in `scripts/` are read-only unless their documentation says otherwise.
 
+## Tool selection
+
+Use [desktop-spreadsheet-workbench](skills/desktop-spreadsheet-workbench/SKILL.md) for actual local Microsoft Excel actions. Use [local-app-integrations](skills/local-app-integrations/SKILL.md) for GitHub data exports or allowlisted local workflows. Never claim these replicate the proprietary @Spreadsheets or Composio services. Never embed credentials in repository files.
+
 ## Tools
 - `python scripts/audit_xlsx.py workbook.xlsx`
 - `python scripts/inventory_xlsx.py workbook.xlsx`

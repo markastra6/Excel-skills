@@ -16,6 +16,16 @@ jobs:
         run: python -m compileall -q scripts tests
       - name: Test Excel toolkit
         run: python -m unittest discover -s tests -v
+      - name: Parse PowerShell desktop automation
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path desktop/ExcelSkills.ps1), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) {
+            foreach ($issue in $errors) { Write-Error $issue.Message }
+            exit 1
+          }
       - name: Audit committed templates
         shell: bash
         run: |
