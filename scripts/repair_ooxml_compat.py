@@ -91,6 +91,19 @@ def fix_drawing(data, count):
     return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 
+def fix_chart_relationships(data, count):
+    """Move nonstandard nested chart-part links to the conventional xl/charts path."""
+    root = ET.fromstring(data)
+    for relationship in root:
+        target = relationship.get("Target", "")
+        if (relationship.get("Type", "").endswith("/chart")
+                and target.startswith("/xl/drawings/charts/chart")
+                and target.endswith(".xml")):
+            relationship.set("Target", "/xl/charts/" + target.rsplit("/", 1)[1])
+            count["chart_relationships_normalized"] += 1
+    return ET.tostring(root, encoding="utf-8", xml_declaration=True)
+
+
 def fix_content_types(data, count):
     root = ET.fromstring(data)
     default = next((e for e in root
@@ -105,6 +118,11 @@ def fix_content_types(data, count):
         override.set("PartName", "/xl/workbook.xml")
         override.set("ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
         count["workbook_override_added"] += 1
+    for node in root:
+        if (node.tag == tag(TYPES, "Override")
+                and node.get("PartName", "").startswith("/xl/drawings/charts/chart")):
+            node.set("PartName", "/xl/charts/" + node.get("PartName").rsplit("/", 1)[1])
+            count["chart_content_types_normalized"] += 1
     return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 
@@ -134,6 +152,12 @@ def repair(source, output):
                     value = fix_worksheet(value, counts)
                 elif info.filename.startswith("xl/drawings/drawing") and info.filename.endswith(".xml"):
                     value = fix_drawing(value, counts)
+                elif (info.filename.startswith("xl/drawings/_rels/drawing")
+                      and info.filename.endswith(".xml.rels")):
+                    value = fix_chart_relationships(value, counts)
+                if info.filename.startswith("xl/drawings/charts/chart") and info.filename.endswith(".xml"):
+                    info.filename = "xl/charts/" + info.filename.rsplit("/", 1)[1]
+                    counts["chart_parts_relocated"] += 1
                 dst.writestr(info, value)
         with ZipFile(tmp) as verify:
             if verify.testzip() is not None:
